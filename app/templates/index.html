@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>YouTube Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+          <h1>HateLoveHue</h1>
+          <h3>Wondering what people are saying about a YouTube video(s)? </h3>
+        </div>
+      </header>
+      <div class="spacer"></div>
+
+    <form action="/" method="post">
+        <div class="button-container">
+            <input type="text"  size="60" name="video_url" placeholder="Enter YouTube video links" required>
+            <input type="submit" id="analyze-button" class="button" value="Analyze">
+          </div>
+    </form>
+
+    {% if data %}
+    {% for video in data %}
+      <div class="video-summary">
+        <h2 class="video-title">Summary for "{{ video['name'] }}"</h2>
+        <p class="positive"><b>Positive:</b> {{ video['positive'] }}</p>
+        <p class="negative"><b>Negative:</b> {{ video['negative'] }}</p>
+        <p class="num-comments"><b>Number of Comments:</b> {{ video['num_comments'] }}</p>
+        <p class="rating"><b>Rating:</b> {{ video['rating'] }}%</p>
+        <h3> Top Comments</h3>
+        <table class="comment-table">
+            <tr>
+                <th>Comment</th>
+                <th>Sentiment</th>
+            </tr>
+            {% for comment, sentiment in video['comments_data'] %}
+            <tr>
+                <td>{{ comment }}</td>
+                <td>{{ sentiment }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+</body>
+
+
+</html>
