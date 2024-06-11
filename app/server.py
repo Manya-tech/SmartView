@@ -57,8 +57,8 @@ def get_video(video_id, points):
         "negative" : negative,
         "num_comments" : len(comments),
         "rating" : round((positive/len(comments))*100, 2),
-        "comments_data" : comments_data,
-        "genout" : genout
+        "comments_data" : comments_data
+        # "genout" : genout
     }
 
     return summary
