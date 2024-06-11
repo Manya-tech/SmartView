@@ -9,7 +9,7 @@ import textwrap
 import google.generativeai as genai
 
 
-genai.configure(api_key="AIzaSyBbEpOFAfxkZqui0O5UKHDE8aGW2P4EF6A")
+genai.configure(api_key="AIzaSyDfaFCEi4LXUv1USOkI66Q2ZXwMG9KExmM")
 
 
 app = Flask(__name__)
@@ -20,7 +20,11 @@ def get_gemini_response(comments,points):
     model = genai.GenerativeModel('gemini-pro')
     prompt = f""" You will get a list of comments of a YouTube video as input and the the main points the user wants in that video. 
 Your role is to analyze the comments and create a summary that first mentions how many points the user wants match the video, then what are the main points discussed in a video and 
-what are main themes in the comments. The output should be well formatted. Just provide a brief overview that will help the reader to uderstand whether the video has what it wants or what the commentators thought about the video.
+what are main themes in the comments. Each heading should have atmost 5 points. Just provide a brief overview that will help the reader to uderstand whether the video has what it wants or what the commentators thought about the video.
+For example:
+Points matching : mention points that matched in bullet point form.
+Viewer insights : mention what people think about the video in bullet point form.
+Main points: mention the main points discussed in the video in bullet point form.
 The points are: {points}. The comments are: {comments}
 """
     response = model.generate_content(prompt)
@@ -48,6 +52,7 @@ def get_video(video_id, points):
 
     summary = {
         "name" : name,
+        "video_id" : video_id,
         "positive" : positive,
         "negative" : negative,
         "num_comments" : len(comments),
