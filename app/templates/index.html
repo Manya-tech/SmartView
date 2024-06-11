@@ -11,6 +11,7 @@
         <div class="container">
           <h1>Insightify</h1>
           <h3>Empowering Your Video Discoveries!</h3>
+            <img class="logo" src="https://img1.wsimg.com/isteam/ip/f8a782f9-60a1-4af5-8a2b-3b836d8b225e/DALL%C2%B7E%202024-01-09%2020.38.54%20-%20Logo%20for%20Insighti.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25" alt="Logo"/>
         </div>
       </header>
       <div class="spacer"></div>
@@ -19,14 +20,15 @@
         <div class="button-container">
             <input type="text" size="60" name="video_url" placeholder="Enter your query" required>
             <textarea name="points" id="points" cols="100" rows="10" placeholder="What do you want?"></textarea>
-            <input type="submit" id="analyze-button" class="button" value="Analyze">
         </div>
+        <button type="submit" id="analyze-button" class="button" value="Analyze"> Analyze </button>
     </form>
 
     {% if data %}
     {% for video in data %}
       <div class="video-summary">
         <h2 class="video-title">Summary for "{{ video['name'] }}"</h2>
+        <p><a href = "https://www.youtube.com/watch?v={{ video['video_id'] }}">Video Link</a></p>
         <p class="positive"><b>Positive:</b> {{ video['positive'] }}</p>
         <p class="negative"><b>Negative:</b> {{ video['negative'] }}</p>
         <p class="num-comments"><b>Number of Comments:</b> {{ video['num_comments'] }}</p>
