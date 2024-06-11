@@ -19,11 +19,11 @@ def get_comments(youtube, **kwargs):
 
      
         # check if there are more comments
-        # if 'nextPageToken' in results:
-        #     kwargs['pageToken'] = results['nextPageToken']
-        #     results = youtube.commentThreads().list(**kwargs).execute()
-        # else:
-        #     break
+        if 'nextPageToken' in results:
+            kwargs['pageToken'] = results['nextPageToken']
+            results = youtube.commentThreads().list(**kwargs).execute()
+        else:
+            break
 
     return comments
 
