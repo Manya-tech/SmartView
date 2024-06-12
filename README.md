@@ -1,19 +1,19 @@
-# Insightify: YouTube Video Insights App
+# SmartView: YouTube Video Insights App
 
-Welcome to the Insightify repository! Insightify is a web application designed to help users gain insights into YouTube videos by analyzing comments and summarizing key information. Simply enter a topic, and Insightify fetches the top 3 videos from YouTube, performs sentiment analysis on their comments, and generates a detailed summary for each video.
+Welcome to the SmartView repository! SmartView is a web application designed to help users gain insights into YouTube videos by analyzing comments and summarizing key information. Simply enter a topic, and SmartView fetches the top 3 videos from YouTube, performs sentiment analysis on their comments, and generates a detailed summary for each video.
 
 ## Table of Contents
 
-- [About Insightify](#about-insightify)
+- [About SmartView](#about-SmartView)
 - [Features](#features)
 - [Demo](#demo)
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
 - [Contribution Guidelines](#contribution-guidelines)
 
-## About Insightify
+## About SmartView
 
-Insightify is designed to assist users in deciding which YouTube video to watch by providing valuable insights from viewer comments. By leveraging sentiment analysis and summarizing key information, Insightify helps users quickly assess the quality and relevance of videos based on community feedback.
+SmartView is designed to assist users in deciding which YouTube video to watch by providing valuable insights from viewer comments. By leveraging sentiment analysis and summarizing key information, SmartView helps users quickly assess the quality and relevance of videos based on community feedback.
 
 ## Features
 
@@ -24,7 +24,7 @@ Insightify is designed to assist users in deciding which YouTube video to watch 
 
 ## Demo
 
-![insightify-demo](path-to-your-demo-image-or-video)
+![SmartView-demo](path-to-your-demo-image-or-video)
 
 [Link to demo video or live site]
 
@@ -38,7 +38,7 @@ Insightify is designed to assist users in deciding which YouTube video to watch 
 
 ## Getting Started
 
-To get started with Insightify, follow these steps:
+To get started with SmartView, follow these steps:
 
 1. Clone the repository to your local machine.
 2. Install the necessary dependencies using `pip install -r requirements.txt`.
@@ -48,7 +48,7 @@ To get started with Insightify, follow these steps:
 
 ## Contribution Guidelines
 
-We welcome contributions from the community to improve Insightify and make it even more valuable for users. To contribute:
+We welcome contributions from the community to improve SmartView and make it even more valuable for users. To contribute:
 
 1. Fork the repository to your GitHub account.
 2. Create a new branch for your feature or bug fix: `git checkout -b feature/your-feature-name` or `bug/issue-number`.
@@ -59,5 +59,5 @@ We welcome contributions from the community to improve Insightify and make it ev
 
 ---
 
-We're excited to have you on board as a contributor to Insightify! If you have any questions or suggestions, feel free to reach out to us or open an issue. Happy coding! 🚀
+We're excited to have you on board as a contributor to SmartView! If you have any questions or suggestions, feel free to reach out to us or open an issue. Happy coding! 🚀
 
