@@ -27,13 +27,13 @@ def get_comments(youtube, **kwargs):
 
     return comments
 
-def get_name(youtube, video_id):
-    name = youtube.videos().list(
-        part="snippet",
-        id=video_id
-    ).execute()
+# def get_name(youtube, video_id):
+#     name = youtube.videos().list(
+#         part="snippet",
+#         id=video_id
+#     ).execute()
 
-    return name['items'][0]['snippet']['title']
+#     return name['items'][0]['snippet']['title']
 
 def main(video_id):
     # Disable OAuthlib's HTTPs verification when running locally.
@@ -43,12 +43,12 @@ def main(video_id):
         "youtube", "v3", developerKey = api_key)
 
     comments = get_comments(youtube, part="snippet", textFormat="plainText", videoId=video_id, order="relevance")
-    name = get_name(youtube, video_id)
+    # name = get_name(youtube, video_id)
    
-    return (name,comments)
+    return comments
 
 
-def get_video_info(video_id):
+def get_video_comments(video_id):
     print("got request")
     return main(video_id)
 
