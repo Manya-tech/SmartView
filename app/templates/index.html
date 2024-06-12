@@ -9,24 +9,32 @@
 <body>
     <header class="header">
         <div class="container">
-          <h1>Insightify</h1>
-          <h3>Empowering Your Video Discoveries!</h3>
-            <!-- <img class="logo" src="https://img1.wsimg.com/isteam/ip/f8a782f9-60a1-4af5-8a2b-3b836d8b225e/DALL%C2%B7E%202024-01-09%2020.38.54%20-%20Logo%20for%20Insighti.png/:/cr=t:0%25,l:0%25,w:100%25,h:100%25" alt="Logo"/> -->
-        </div>
-      </header>
-      <div class="spacer"></div>
+          <img class="logo" src="static/smartview_logo.png" alt="Logo" style="position: absolute; top: 0; left: 0;">
+          <!-- <h1>Insightify</h1> -->
+           <h3>Empowering Your <br><span style="color: violet;">Video Discoveries!</span></h3>
+           <p style="font-size: 1.2em; color: antiquewhite;">SmartView helps you choose the best YouTube videos by analyzing comments for sentiment. Easily find top videos on any topic, see positive and negative feedback, and get a quick summary to make informed viewing choices.</p>
+          <div style="display: flex; justify-content: center; margin-top: 100px;">
+            <button style="padding: 7px 28px; background-color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center;">
+              <a href="#form-section" style="text-decoration: none;">
+                <span style="color: gray; font-size: 16px; font-weight: bold; text-transform: uppercase;">Get Started</span>
+              </a>
+            </button>
+          </div>
+            <div class="spacer"></div>
+            <form action="/" method="post" id="form-section">
+            <div class="button-container"> 
+              <input type="text" size="50" name="video_topic" placeholder="Enter your query" required style="width: 80%; margin: 0 auto; display: block;">
+              <button type="submit" id="analyze-button" class="button" value="Analyze" style="padding: 10px 30px;">
+                <span style="color: rgb(9, 0, 0); font-size: 16px; font-weight: bold; text-transform: uppercase;">GO</span>
 
-      <form action="/" method="post">
-        <div class="button-container">
-            <input type="text" size="50" name="video_topic" placeholder="Enter your query" required>
-        </div>
-        <button type="submit" id="analyze-button" class="button" value="Analyze">Fetch</button>
-    </form>
+              </button>
+            </div>
+            </form>
 
     {% if data %}
     {% for video in data %}
       <div class="video-summary">
-        <h2 class="video-title">Summary for "{{ video['title'] }}"</h2>
+        <h2 class="video-title">Summary for <span style="color: violet;">{{ video['title'] }}</span></h2>
         <p><a href = "https://www.youtube.com/watch?v={{ video['video_id'] }}">Video Link</a></p>
         <div class="video-stats">
           <p class="num-likes"><b>Likes:</b> {{ video['like_count'] }}</p>
@@ -40,7 +48,7 @@
         <!-- <div class="gen-output-box">
           <p><b>Top points:</b>{{video['genout']}}</p>
         </div> -->
-        <h3> Top Comments</h3>
+        <h3 class="top-comments"> Top Comments</h3>
         <table class="comment-table">
             <tr>
                 <th>Comment</th>
@@ -56,6 +64,17 @@
       </div>
     {% endfor %}
   {% endif %}
+
+
+  <div class="spacer"></div>
+  <div class="spacer"></div>
+  <div class="spacer"></div>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 SmartView. All rights reserved.</p>
+        </div>
+    </footer>
+    
 
 </body>
 
