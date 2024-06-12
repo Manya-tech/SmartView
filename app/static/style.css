@@ -1,5 +1,13 @@
-.body {
-    background-color: #f2f2f2;
+/* * {
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
+html { scroll-behavior: smooth;}
+
+body {
+    background-color: hsla(0, 0%, 1%, 0.976);
     font-family: Arial, sans-serif,'Open Sans';
     text-align: center;
     margin-top: 50px;
@@ -34,6 +42,14 @@ color: #fa2508;
 color: #333;
 }
 
+.num-likes {
+    color: #333;
+}
+
+.num-views {
+    color: #333;
+}
+
 .rating {
 color: #333;
 }
@@ -53,7 +69,7 @@ text-align: left;
 
 .comment-table th {
 background-color: #333;
-color: #fff;
+color: #f7f1f1;
 font-weight: normal;
 border-radius: 5px 5px 0 0;
 }
@@ -62,6 +78,9 @@ border-radius: 5px 5px 0 0;
 font-size: 0.9rem;
 }
 
+.comment-table td:nth-child(1) {
+    color: black;
+}
 .comment-table td:nth-child(2) {
 color: #0a63f4;
 }
@@ -71,26 +90,28 @@ background-color: #f2f2f2;
 }
 
 .button-container {
-display: flex;
-align-items: center;
-margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
 }
 
 .button-container input[type="text"] {
-flex-grow: 1;
-padding: 10px;
-border-radius: 5px 0 0 5px;
-border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px 5px 5px 5px;
+    border: 1px solid #ccc;
+    margin-right: 2px; /* Add margin-right to create space between input box and button */
 }
 
 .button {
-background-color: #333;
-color: #fff;
-border: none;
-padding: 10px 20px;
-border-radius: 0 5px 5px 0;
-cursor: pointer;
-transition: background-color 0.3s ease;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .button:hover {
@@ -105,15 +126,26 @@ overflow: hidden;
 }
 
 .header {
-background-color: #333;
+/* background-color: #020202; */
 color: #fff;
 padding: 20px;
 text-align: center;
 }
 
 .header h1 {
-font-size: 3rem;
+font-size: 5rem;
 margin: 0;
+}
+
+h3 {
+    display: block;
+    font-size: 6em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+    unicode-bidi: isolate;
 }
 
 .main-content {
@@ -132,9 +164,16 @@ line-height: 1.5;
 margin-bottom: 20px;
 }
 
+.top-comments{
+    font-size: 1rem;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    color: black;
+}
+
 .button {
-background-color: #333;
-color: #fff;
+background-color:violet;
+color: #070000;
 border: none;
 padding: 10px 20px;
 border-radius: 5px;
@@ -155,5 +194,8 @@ animation: fade-in 1s ease-in-out;
 100% { opacity: 1; }
 }
 .spacer {
-height: 50px;
+height: 200px;
 }
+
+
+
