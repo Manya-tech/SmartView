@@ -12,7 +12,7 @@
           <img class="logo" src="static/smartview_logo.png" alt="Logo" style="position: absolute; top: 0; left: 0;">
           <!-- <h1>Insightify</h1> -->
            <h3>Empowering Your <br><span style="color: violet;">Video Discoveries!</span></h3>
-           <p style="font-size: 1.2em; color: antiquewhite;">SmartView helps you choose the best YouTube videos by analyzing comments for sentiment. Easily find top videos on any topic, see positive and negative feedback, and get a quick summary to make informed viewing choices.</p>
+           <p style="font-size: 1.2em; color: antiquewhite;">SmartView helps you choose the best YouTube videos by analyzing comments for sentiment. Easily find top videos on any topic, see positive and negative feedback, and get a quick summary to make informed viewing choices. Click on the thumnail to watch the video</p>
           <div style="display: flex; justify-content: center; margin-top: 100px;">
             <button style="padding: 7px 28px; background-color: white; border-radius: 9999px; display: flex; align-items: center; justify-content: center;">
               <a href="#form-section" style="text-decoration: none;">
@@ -35,19 +35,49 @@
     {% for video in data %}
       <div class="video-summary">
         <h2 class="video-title">Summary for <span style="color: violet;">{{ video['title'] }}</span></h2>
-        <p><a href = "https://www.youtube.com/watch?v={{ video['video_id'] }}">Video Link</a></p>
-        <div class="video-stats">
-          <p class="num-likes"><b>Likes:</b> {{ video['like_count'] }}</p>
-          <p class="num-views"><b>Views:</b> {{ video['view_count'] }}</p>
-          <p class="num-comments"><b>Comments:</b> {{ video['num_comments'] }}</p>
-        </div>
-        <p class="positive"><b>Positive:</b> {{ video['positive'] }}</p>
-        <p class="negative"><b>Negative:</b> {{ video['negative'] }}</p>
-        <!-- <p class="num-comments"><b>Number of Comments:</b> {{ video['num_comments'] }}</p>   -->
-        <p class="rating"><b>Rating:</b> {{ video['rating'] }}%</p>
-        <!-- <div class="gen-output-box">
-          <p><b>Top points:</b>{{video['genout']}}</p>
-        </div> -->
+        <table class="video-info">
+          <tr>
+            <th style="width: 50%; margin-right: 20px;"></th>
+            <th style="width: 50%; margin-left: 20px;"></th>
+          </tr>
+          <tr>
+            <td>
+              <p class="num-likes"><b>Likes:</b> {{ video['like_count'] }}</p>
+            </td>
+            <td rowspan="6" style="text-align: center;">
+              <a target="_blank" href="https://www.youtube.com/watch?v={{ video['video_id'] }}">
+                <img src="{{ video['thumbnail'] }}" alt="Thumbnail" style="width: 400px; height: 200px; margin-left: 20px; border-radius: 10px; border: 1px solid black; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);">
+              </a>
+            </td>
+          </tr>
+            <tr>
+              <td>
+                <p class="num-views"><b>Views:</b> {{ video['view_count'] }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="num-comments"><b>Comments:</b> {{ video['num_comments'] }}</p>
+
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="positive"><b>Positive:</b> {{ video['positive'] }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="negative"><b>Negative:</b> {{ video['negative'] }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="rating"><b>Rating:</b> {{ video['rating'] }}%</p>
+              </td>
+            </tr>
+         
+        </table>
         <h3 class="top-comments"> Top Comments</h3>
         <table class="comment-table">
             <tr>
