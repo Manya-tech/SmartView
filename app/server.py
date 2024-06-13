@@ -55,7 +55,8 @@ def get_stats(video):
         "negative" : negative,
         "num_comments" : len(comments),
         "rating" : round((positive/len(comments))*100, 2),
-        "comments_data" : comments_data
+        "comments_data" : comments_data,
+        "thumbnail" : video['thumbnail'],
     }
 
     return summary
