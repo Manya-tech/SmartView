@@ -36,6 +36,7 @@ def get_video(query):
             id=video_id
         ).execute()
 
+        # pprint(video_info)
         # Check if comments are enabled for the video
         if 'commentCount' in video_info['items'][0]['statistics']:
             videos_info.append({
@@ -45,7 +46,8 @@ def get_video(query):
                 'description' : search_result['snippet']['description'],
                 'comment_count': video_info['items'][0]['statistics']['commentCount'],
                 'view_count' : video_info['items'][0]['statistics']['viewCount'],
-                "like_count": video_info['items'][0]['statistics']['likeCount']
+                "like_count": video_info['items'][0]['statistics']['likeCount'],
+                "thumbnail": video_info['items'][0]['snippet']['thumbnails']['maxres']['url']
             })
 
     return videos_info
@@ -63,4 +65,5 @@ def get_video(query):
 #     print(f"   Comment Count: {video['comment_count']}")
 #     print(f"   View Count: {video['view_count']}")
 #     print(f"   Like Count: {video['like_count']}")
+#     print(f"   Thumbnail: {video['thumbnail']}")
 #     print()
