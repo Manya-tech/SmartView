@@ -54,6 +54,19 @@ color: #333;
 color: #333;
 }
 
+.main_points {
+    color: #333;
+    }
+
+.video-info {
+    /* width: 100%; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.video-info td {
+    text-align: center;
+}
 .comment-table {
 width: 100%;
 border-collapse: collapse;
