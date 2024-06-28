@@ -26,11 +26,6 @@ SmartView is designed to assist users in deciding which YouTube video to watch b
 
 https://github.com/Manya-tech/SmartView/assets/85272000/edcff501-3230-4c86-a9bd-132269203b66
 
-
-![SmartView-demo](path-to-your-demo-image-or-video)
-
-[Link to demo video or live site]
-
 ## Technologies Used
 
 - **Flask:** A lightweight web framework for Python, used for backend development.
