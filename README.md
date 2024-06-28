@@ -30,7 +30,6 @@ https://github.com/Manya-tech/SmartView/assets/85272000/edcff501-3230-4c86-a9bd-
 
 - **Flask:** A lightweight web framework for Python, used for backend development.
 - **HTML, CSS:** Frontend technologies used for designing the web application.
-- **JavaScript:** Utilized for interactivity and client-side processing to enhance user experience.
 - **Sentiment Analysis Model:** Used for analyzing the sentiment of YouTube video comments.
 - **YouTube Data API:** Utilized for fetching video comments and details from YouTube.
 
