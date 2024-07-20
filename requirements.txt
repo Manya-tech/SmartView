@@ -1,14 +1,14 @@
-Flask==3.0.3
-Flask_Cors==4.0.0
-google_api_python_client==2.126.0
-keras==2.10.0
-Keras_Preprocessing==1.1.2
-numpy<2.0.0
-pandas==2.2.2
-protobuf==3.19.5
-python-dotenv==1.0.1
-tensorflow==2.10.1
-gunicorn==22.0.0
+Flask
+Flask_Cors
+google_api_python_client
+keras
+Keras_Preprocessing
+numpy
+pandas
+protobuf
+python-dotenv
+tensorflow
+gunicorn
 # pickle
 # googleapiclient
 # pathlib
