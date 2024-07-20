@@ -3,11 +3,11 @@ Flask_Cors
 google_api_python_client
 keras
 Keras_Preprocessing
-numpy
-pandas
 protobuf
 python-dotenv
 tensorflow
+numpy
+pandas
 gunicorn
 # pickle
 # googleapiclient
