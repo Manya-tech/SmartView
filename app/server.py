@@ -1,29 +1,12 @@
 from flask import Flask, request, render_template
-from .predict import predict_sentiment
-from .youtube import get_video_comments
-from .video import get_video
+from predict import predict_sentiment
+from youtube import get_video_comments
+from video import get_video
 from flask_cors import CORS
-import pathlib
-import textwrap
-
-#import google.generativeai as genai
-
-
-#genai.configure(api_key="AIzaSyDfaFCEi4LXUv1USOkI66Q2ZXwMG9KExmM")
 
 
 app = Flask(__name__)
 CORS(app)
-
-
-# def get_gemini_response(comments):
-#     model = genai.GenerativeModel('gemini-pro')
-#     prompt = f""" You will get a list of comments of a YouTube video as input. You need to analyze them and mention the top three positive and negative comments.
-#     The comments are: {comments}
-# """
-#     response = model.generate_content(prompt)
-#     result=response.text
-#     return result
 
 
 
