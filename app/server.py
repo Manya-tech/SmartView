@@ -1,15 +1,15 @@
 from flask import Flask, request, render_template
-from predict import predict_sentiment
-from youtube import get_video_comments
-from video import get_video
+from .predict import predict_sentiment
+from .youtube import get_video_comments
+from .video import get_video
 from flask_cors import CORS
 import pathlib
 import textwrap
 
-import google.generativeai as genai
+#import google.generativeai as genai
 
 
-genai.configure(api_key="AIzaSyDfaFCEi4LXUv1USOkI66Q2ZXwMG9KExmM")
+#genai.configure(api_key="AIzaSyDfaFCEi4LXUv1USOkI66Q2ZXwMG9KExmM")
 
 
 app = Flask(__name__)
