@@ -1,15 +1,12 @@
+tensorflow==2.10.1
+keras==2.10.0
+Keras_Preprocessing==1.1.2
 Flask
 Flask_Cors
 google_api_python_client
-keras
-Keras_Preprocessing
 protobuf
-python-dotenv
-tensorflow
 numpy
 pandas
 gunicorn
-# pickle
-# googleapiclient
-# pathlib
-# textwrap
+python-dotenv
+
