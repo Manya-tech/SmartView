@@ -5,7 +5,7 @@ Flask
 Flask_Cors
 google_api_python_client
 protobuf
-numpy
+numpy<2.0
 pandas
 gunicorn
 python-dotenv
