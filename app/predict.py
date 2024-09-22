@@ -1,40 +1,44 @@
-import numpy as np
-from tensorflow import keras
-from keras.models import load_model
+from keras.preprocessing.text import Tokenizer
 from keras_preprocessing.sequence import pad_sequences
-import pickle
+from keras.models import Sequential, load_model # Add 'load_model'
+from joblib import dump, load # For reading the Tokenizer Pickle
 
-VOCAB_SIZE = 10000
-MAX_LEN = 250
-MODEL_PATH = "app/sentiment_analysis_model.h5"
+KERAS_MODEL = "app/model.h5"
+TOKENIZER_MODEL = "app/tokenizer.pkl"
 
+# KERAS
+SEQUENCE_LENGTH = 300
 
-#Load the saved model
-model = load_model(MODEL_PATH)
+# SENTIMENT
+POSITIVE = "Positive"
+NEGATIVE = "Negative"
+NEUTRAL = "Neutral"
+SENTIMENT_THRESHOLDS = (0.4, 0.7)
 
-#Load the tokenizer
-with open("app/tokenizer.pickle","rb") as handle:
-    tokenizer = pickle.load(handle)
+# Load the model and the tokenizer to make predictions
+model = load_model(KERAS_MODEL)
+tokenizer = load(TOKENIZER_MODEL)
 
+def decode_sentiment(score, include_neutral=False):
+    if include_neutral:        
+        label = NEUTRAL
+        if score <= SENTIMENT_THRESHOLDS[0]:
+            label = NEGATIVE
+        elif score >= SENTIMENT_THRESHOLDS[1]:
+            label = POSITIVE
 
-def encode_texts(text_list):
-    encoded_texts = []
-    for text in text_list:
-        tokens = keras.preprocessing.text.text_to_word_sequence(text)
-        tokens = [tokenizer.word_index[word] if word in tokenizer.word_index else 0 for word in tokens]
-        encoded_texts.append(tokens)
-    return pad_sequences(encoded_texts, maxlen=MAX_LEN, padding='post', value=VOCAB_SIZE-1)
+        return label
+    else:
+        return NEGATIVE if score < 0.5 else POSITIVE
+    
+def predict_sentiment(text_list, include_neutral=False):
+    sentiments=[]
+    x_test = pad_sequences(tokenizer.texts_to_sequences(text_list), maxlen=SEQUENCE_LENGTH)
+    # Predict
+    scores = model.predict(x_test)
+    for score in scores:
 
-def predict_sentiment(text_list):
-    encoded_inputs = encode_texts(text_list)
-    predictions = np.argmax(model.predict(encoded_inputs), axis=-1)
-    sentiments = []
-    for prediction in predictions:
-        if prediction == 0:
-           sentiments.append("Negative")
-        elif prediction == 1:
-            sentiments.append("Neutral")
-        else:
-            sentiments.append("Positive")
+        label = decode_sentiment(score, include_neutral=include_neutral)
+        sentiments.append(label)
 
     return sentiments
