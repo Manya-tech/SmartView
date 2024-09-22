@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
-from .predict import predict_sentiment
-from .youtube import get_video_comments
-from .video import get_video
+from predict import predict_sentiment
+from youtube import get_video_comments
+from video import get_video
 from flask_cors import CORS
 
 
@@ -22,10 +22,6 @@ def get_stats(video):
     positive = predictions.count("Positive")  
     negative = predictions.count("Negative")
     comments_data = list(zip(comments[:10], predictions[:10]))
-    # comms = " "
-    # for comment in comments:
-    #     comms = comms+comment
-    # genout = get_gemini_response(comms)
 
     summary = {
         "title" : video['title'],
