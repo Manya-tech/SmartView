@@ -5,62 +5,137 @@ from tensorflow import keras
 import tensorflow as tf
 from keras_preprocessing.sequence import pad_sequences
 from keras.models import Sequential, load_model
-from keras.layers import Embedding, Dense, GlobalAveragePooling1D
+from keras.layers import Activation, Embedding, Dense, Dropout, Flatten, Conv1D, MaxPooling1D, LSTM
 from keras.preprocessing.text import Tokenizer
 import pickle
+from keras import utils
+from keras.callbacks import ReduceLROnPlateau, EarlyStopping
+# DataFrame
+import pandas as pd
+# Scikit-learn
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+from sklearn.manifold import TSNE
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-#Parameters
+# nltk
+import nltk
+from nltk.corpus import stopwords
+from  nltk.stem import SnowballStemmer
 
-VOCAB_SIZE = 10000
-MAX_LEN = 250
-EMBEDDING_DIM = 16
-MODEL_PATH = "sentiment_analysis_model.h5"
+# Word2vec
+import gensim
+
+# Utility
+import re
+import numpy as np
+import os
+from collections import Counter
+import logging
+import time
+import pickle
+import itertools
+
+nltk.download('stopwords')
+
+# DATASET
+DATASET_COLUMNS = ["target", "ids", "date", "flag", "user", "text"]
+TRAIN_SIZE = 0.8
+
+# TEXT CLENAING
+TEXT_CLEANING_RE = "@\S+|https?:\S+|http?:\S|[^A-Za-z0-9]+"
+
+# WORD2VEC 
+W2V_SIZE = 300
+W2V_WINDOW = 7
+W2V_EPOCH = 32
+W2V_MIN_COUNT = 10
+
+# KERAS
+SEQUENCE_LENGTH = 300
+EPOCHS = 8
+BATCH_SIZE = 1024
+
+# SENTIMENT
+POSITIVE = "POSITIVE"
+NEGATIVE = "NEGATIVE"
+NEUTRAL = "NEUTRAL"
+SENTIMENT_THRESHOLDS = (0.4, 0.7)
+
+# EXPORT
+KERAS_MODEL = "model.h5"
+WORD2VEC_MODEL = "model.w2v"
+TOKENIZER_MODEL = "tokenizer.pkl"
+ENCODER_MODEL = "encoder.pkl"
 
 file_path = "YouTube-Sentiment-Analysis-App\data.csv"
-df = pd.read_csv(file_path, encoding = 'ISO-8859-1')
+df = pd.read_csv(file_path, encoding = 'ISO-8859-1', names=DATASET_COLUMNS)
 df_shuffled = df.sample(frac=1).reset_index(drop=True)
 
+decode_map = {0: "NEGATIVE", 2: "NEUTRAL", 4: "POSITIVE"}
+def decode_sentiment(label):
+    return decode_map[int(label)]
 
-texts = []
-labels = []
+df.target = df.target.apply(lambda x: decode_sentiment(x))
 
-print(df_shuffled.head())
+stop_words = stopwords.words("english")
+stemmer = SnowballStemmer("english")
 
-for index, row in df_shuffled.iterrows():
-   
-    texts.append(row.iloc[-1])
-    label = row.iloc[0]
-    labels.append(0 if label == 0 else 1 if label == 2 else 2)
+def preprocess(text, stem=False):
+    # Remove link,user and special characters
+    text = re.sub(TEXT_CLEANING_RE, ' ', str(text).lower()).strip()
+    tokens = []
+    for token in text.split():
+        if token not in stop_words:
+            if stem:
+                tokens.append(stemmer.stem(token))
+            else:
+                tokens.append(token)
+    return " ".join(tokens)
 
-print("done")
+df.text = df.text.apply(lambda x: preprocess(x))
+df_train, df_test = train_test_split(df, test_size=1-TRAIN_SIZE, random_state=42)
+documents = [_text.split() for _text in df_train.text] 
 
-texts = np.array(texts)
-labels = np.array(labels)
+w2v_model = gensim.models.word2vec.Word2Vec(size=W2V_SIZE, 
+                                            window=W2V_WINDOW, 
+                                            min_count=W2V_MIN_COUNT, 
+                                            workers=8)
+w2v_model.build_vocab(documents)
 
-#Tokenize the sequences
-tokenizer = Tokenizer(num_words=VOCAB_SIZE)
-tokenizer.fit_on_texts(texts)
-sequences = tokenizer.texts_to_sequences(texts)
+tokenizer = Tokenizer()
+tokenizer.fit_on_texts(df_train.text)
 
-#Padding the sequences
-padded_sequences = pad_sequences(sequences, maxlen = MAX_LEN, value=VOCAB_SIZE-1, padding='pre')
-print(padded_sequences[0])
+vocab_size = len(tokenizer.word_index) + 1
+print("Total words", vocab_size)
+x_train = pad_sequences(tokenizer.texts_to_sequences(df_train.text), maxlen=SEQUENCE_LENGTH)
+x_test = pad_sequences(tokenizer.texts_to_sequences(df_test.text), maxlen=SEQUENCE_LENGTH)
 
-#Save the tokenizer to a file
-with open('tokenizer.pickle', 'wb') as handle:
-    pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
+labels = df_train.target.unique().tolist()
+labels.append(NEUTRAL)
 
-# Split data into training and test sets 
-train_data = padded_sequences[:-7000]
-test_data = padded_sequences[-3000:]
-train_labels = labels[:-7000]
-test_labels = labels[-3000:]
+encoder = LabelEncoder()
+encoder.fit(df_train.target.tolist())
+
+y_train = encoder.transform(df_train.target.tolist())
+y_test = encoder.transform(df_test.target.tolist())
+
+y_train = y_train.reshape(-1,1)
+y_test = y_test.reshape(-1,1)
+
+embedding_matrix = np.zeros((vocab_size, W2V_SIZE))
+for word, i in tokenizer.word_index.items():
+  if word in w2v_model.wv:
+    embedding_matrix[i] = w2v_model.wv[word]
+
+embedding_layer = Embedding(vocab_size, W2V_SIZE, weights=[embedding_matrix], input_length=SEQUENCE_LENGTH, trainable=False)
 
 
 # Check if saved model exists
-if os.path.exists(MODEL_PATH):
+if os.path.exists(KERAS_MODEL):
     print("Loading saved model...")
-    model = load_model(MODEL_PATH)
+    model = load_model(KERAS_MODEL)
 else:
     print("Training a new model...")
     
@@ -68,44 +143,67 @@ else:
     strategy = tf.distribute.MirroredStrategy()
     print("Number of devices: {}".format(strategy.num_replicas_in_sync))
     with strategy.scope():
-    # Define the model
-        model = Sequential([
-        Embedding(VOCAB_SIZE, EMBEDDING_DIM, input_length=MAX_LEN),
-        GlobalAveragePooling1D(),
-        Dense(16, activation='relu'),
-        Dense(3, activation='softmax')  # 3 classes: negative, neutral, positive
-    ])
+        model = Sequential()
+        model.add(embedding_layer)
+        model.add(Dropout(0.5))
+        model.add(LSTM(100, dropout=0.2, recurrent_dropout=0.2))
+        model.add(Dense(1, activation='sigmoid')) # 3 classes: negative, neutral, positive
 
         # Compile the model
-        model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+        model.compile(loss='binary_crossentropy',
+              optimizer="adam",
+              metrics=['accuracy'])
+        callbacks = [ ReduceLROnPlateau(monitor='val_loss', patience=5, cooldown=0),
+              EarlyStopping(monitor='val_acc', min_delta=1e-4, patience=5)]
 
     # Train the model
-    model.fit(train_data, train_labels, epochs=10, batch_size=32, validation_split=0.2)
+    model.fit(x_train, y_train,
+                batch_size=BATCH_SIZE,
+                epochs=EPOCHS,
+                validation_split=0.1,
+                verbose=1,
+                callbacks=callbacks)
 
-    # Save the trained model
-    model.save(MODEL_PATH)
+# Evaluate on test data
+score = model.evaluate(x_test, y_test, batch_size=BATCH_SIZE)
+print()
+print(f"Test accuracy: {score[1] * 100:.2f}%")
+print(f"Test loss: {score[0] * 100:.2f}%")
 
-    # Evaluate on test data
-loss, accuracy = model.evaluate(test_data, test_labels)
-print(f"Test accuracy: {accuracy * 100:.2f}%")
+model.save(KERAS_MODEL)
+w2v_model.save(WORD2VEC_MODEL)
+pickle.dump(tokenizer, open(TOKENIZER_MODEL, "wb"), protocol=0)
+pickle.dump(encoder, open(ENCODER_MODEL, "wb"), protocol=0)
 
-# Interactive loop for predictions
-def encode_text(text):
-    tokens = tf.keras.preprocessing.text.text_to_word_sequence(text)
-    tokens = [tokenizer.word_index[word] if word in tokenizer.word_index else 0 for word in tokens]
-    return pad_sequences([tokens], maxlen=MAX_LEN, padding='post', value=VOCAB_SIZE-1)
+
+def decode_sentiment(score, include_neutral=True):
+    if include_neutral:        
+        label = NEUTRAL
+        if score <= SENTIMENT_THRESHOLDS[0]:
+            label = NEGATIVE
+        elif score >= SENTIMENT_THRESHOLDS[1]:
+            label = POSITIVE
+
+        return label
+    else:
+        return NEGATIVE if score < 0.5 else POSITIVE
+    
+def predict(text, include_neutral=True):
+    start_at = time.time()
+    # Tokenize text
+    x_test = pad_sequences(tokenizer.texts_to_sequences([text]), maxlen=SEQUENCE_LENGTH)
+    # Predict
+    score = model.predict([x_test])[0]
+    # Decode sentiment
+    label = decode_sentiment(score, include_neutral=include_neutral)
+
+    return label  
 
 while True:
     user_input = input("Enter a sentence for sentiment analysis (or 'exit' to quit): ")
     if user_input.lower() == 'exit':
         break
     
-    encoded_input = encode_text(user_input)
-    prediction = np.argmax(model.predict(encoded_input))
-
-    if prediction == 0:
-        print("Sentiment: Negative")
-    elif prediction == 1:
-        print("Sentiment: Neutral")
-    else:
-        print("Sentiment: Positive")
+    prediction = predict(user_input)
+    print(f"Sentiment: {prediction}")
+   
